@@ -1,5 +1,6 @@
 package com.coolcode.exercise.select;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import com.coolcode.exercise.common.util;
@@ -13,44 +14,50 @@ public class QuickSelect
 	public int selectKthLargest(int [] nums, int kth)
 	{
 		this.nums = nums;
-		this.kth = kth;
+		this.kth = kth-1;
 		isLargest = true;
-		return select(0, nums.length);
+		return nums[select(0, nums.length)];
 	}
 
 	public int selectKthSmallest(int [] nums, int kth)
 	{
 		this.nums = nums;
-		this.kth = kth;
+		this.kth = kth-1;
 		isLargest = false;
-		return select(0, nums.length);
+		return nums[select(0, nums.length)];
 	}
 
 	private int select(int start, int end)
 	{
 		if(start == end)
-			return nums[start];
+			return start;
 
 		int pivotIndex = partition(start, end);
+		System.out.println(pivotIndex);
+    	System.out.println(Arrays.toString(nums));
 		if(pivotIndex == kth)
-			return nums[pivotIndex];
-		if(pivotIndex < kth)
+			return pivotIndex;
+		if(kth > pivotIndex)
 		{
-			pivotIndex = select(start, pivotIndex);
+//			pivotIndex = isLargest ? select(pivotIndex+1, end): select(start, pivotIndex); 
+			pivotIndex = select(pivotIndex+1, end);
 		}
 		else
-			pivotIndex = select(pivotIndex+1, end);
+		{
+			//pivotIndex = isLargest ? select(start, pivotIndex): select(pivotIndex+1, end);
+			pivotIndex = select(start, pivotIndex);
+		}
 			
-		return nums[pivotIndex];
+		return pivotIndex;
 	}
 		
 	private int partition(int start, int end)
 	{
 		Random rand = new Random();
-		int pivot = start + rand.nextInt(end - start);
-		util.swap(nums, pivot, start);
-		
+		int pivot = start + rand.nextInt(end - start);		
 		int pivotVal = nums[pivot];
+		util.swap(nums, pivot, start);
+
 		int i,j = 0;
 		for(i=start, j=end-1; i<j; )
 		{
@@ -84,7 +91,7 @@ public class QuickSelect
 				{
 					if(nums[i] < pivotVal)
 					{
-						nums[j++] = nums[i];
+						nums[j--] = nums[i];
 						break;
 					}
 					else
@@ -94,7 +101,7 @@ public class QuickSelect
 				{
 					if(nums[i] > pivotVal)
 					{
-						nums[j++] = nums[i];
+						nums[j--] = nums[i];
 						break;
 					}
 					else
