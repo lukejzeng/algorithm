@@ -33,7 +33,6 @@ public class QuickSelect
 			return start;
 
 		int pivotIndex = partition(start, end);
-		System.out.println(pivotIndex);
     	System.out.println(Arrays.toString(nums));
 		if(pivotIndex == kth)
 			return pivotIndex;
@@ -55,6 +54,7 @@ public class QuickSelect
 	{
 		Random rand = new Random();
 		int pivot = start + rand.nextInt(end - start);		
+		//System.out.println("Pivot: " + pivot);
 		int pivotVal = nums[pivot];
 		util.swap(nums, pivot, start);
 
@@ -77,7 +77,7 @@ public class QuickSelect
 				{
 					if (nums[j] < pivotVal) 
 					{
-						nums[i++] = nums[i];
+						nums[i++] = nums[j];
 						break;
 					}
 					else 
@@ -110,6 +110,7 @@ public class QuickSelect
 			}
 		}
 		nums[i] = pivotVal;
+    	//System.out.println("After partition: " + Arrays.toString(nums));
 		return i;
 	}
 }

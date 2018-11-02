@@ -8,7 +8,7 @@ public class App
 {
     public static void main( String[] args )
     {
-    	NQueens nq = new NQueens(4);
+    	NQueens nq = new NQueens(8);
     	nq.solve();
     }
 }
