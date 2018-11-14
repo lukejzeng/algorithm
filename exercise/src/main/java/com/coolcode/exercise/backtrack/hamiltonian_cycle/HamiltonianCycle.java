@@ -1,6 +1,7 @@
 package com.coolcode.exercise.backtrack.hamiltonian_cycle;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class HamiltonianCycle 
 {
@@ -14,37 +15,57 @@ public class HamiltonianCycle
 		this.numberOfVertexes = adjacencyMatrix.length;
 		this.adjacencyMatrix = adjacencyMatrix;
 		this.hamiltonianPath = new int[this.numberOfVertexes];
-		this.hamiltonianPath[0] = 0;
+		Arrays.stream(hamiltonianPath).forEach(item->{item = -1;});
+		this.hamiltonianPath = IntStream.generate(()->-1).limit(this.numberOfVertexes).toArray();
 	}
 	
-	public boolean findPath(int startingNode)
+	public boolean solve(int startingNode)
 	{
 		if(startingNode == numberOfVertexes || startingNode < 0)
 			return false;
 		int rowIndex = hamiltonianPath[pathIndex] = startingNode;
 		for(int i = rowIndex; i<numberOfVertexes; i++)
 		{
-			for(int j = 0; j<numberOfVertexes; j++)
+			if(findPath(i) == true)
+				return true;
+			else
 			{
-				if(adjacencyMatrix[rowIndex][j] == 1)
-				{
-					if(isCompletedPath(j))
-						return true;
-					if(isValidPath(j))
-					{
-						hamiltonianPath[++pathIndex] = rowIndex = j;
-						printHamiltonPath();
-						break;
-					}
-					else
-					{
-						rowIndex = hamiltonianPath[--pathIndex];
-					}
-				}
+				pathIndex = 0;
+				Arrays.stream(hamiltonianPath).forEach(item->{item = -1;});
 			}
-			return findPath(i-1);
 		}
 		
+		return false;
+	}
+	
+	public boolean findPath(int startingNode)
+	{
+		if(startingNode > numberOfVertexes -1 || startingNode < 0)
+			return false;
+		int rowIndex = hamiltonianPath[pathIndex] = startingNode;
+		for(int i = 0; i<numberOfVertexes; i++)
+		{
+			if(adjacencyMatrix[rowIndex][i] == 1)
+			{
+				if(isCompletedPath(i))
+					return true;
+				if(isValidPath(i))
+				{
+					hamiltonianPath[++pathIndex] = i;
+					System.out.println("Found valid node: " + i);
+					printHamiltonPath();
+					if(findPath(i) == true)
+						return true;
+					else
+						hamiltonianPath[pathIndex--] = -1;
+				}
+				else
+				{
+					System.out.println("Invalid node: " + i);
+					printHamiltonPath();
+				}
+			}
+		}
 		return false;
 	}
 
@@ -62,7 +83,6 @@ public class HamiltonianCycle
 		{
 			if(hamiltonianPath[i] == nextNode)
 			{
-				System.out.println("Cycle found - node: " + nextNode + " visited already");
 				return false;
 			}
 		}
@@ -98,15 +118,18 @@ public class HamiltonianCycle
 	public static void main(String[] args) 
 	{ 
 		int [][] adjacencyMatrix = {{0,1,1,1,0,0}, 
-									{0,0,1,1,1,1}, 
+									{1,0,1,0,1,1}, 
 									{1,1,0,1,0,1}, 
 									{1,0,1,0,0,1},
 									{0,1,0,0,0,1},
 									{0,1,1,1,1,0}};
 		HamiltonianCycle hc = new HamiltonianCycle(adjacencyMatrix);
 		hc.printAdjacencyMatrix();
-		if(hc.findPath(0))
+		if(hc.solve(0))
+		{
+			System.out.println("Hamilton path is found");
 			hc.printHamiltonPath();
+		}
 		else
 			System.out.println("Hamilton path is not found");
 	}
