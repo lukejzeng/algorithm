@@ -1,4 +1,4 @@
-package com.coolcode.exercise.backtrack.nqueens;
+package com.coolcode.exercise.backtrack;
 
 /**
  * Hello world!

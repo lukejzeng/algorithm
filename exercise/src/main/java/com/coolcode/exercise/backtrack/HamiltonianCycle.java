@@ -1,4 +1,4 @@
-package com.coolcode.exercise.backtrack.hamiltonian_cycle;
+package com.coolcode.exercise.backtrack;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
