@@ -67,7 +67,7 @@ public class KnightsTour
 		if(startX >= boardSize && startY >= boardSize)
 			return false;
 		
-		System.out.println("startX=" + startX + ", startY=" + startY);
+		//System.out.println("startX=" + startX + ", startY=" + startY);
 		for(int i = 0;  i<xMoves.length; i++)
 		{
 			newX = startX + xMoves[i];
@@ -77,14 +77,14 @@ public class KnightsTour
 			if(chessBoard[newX][newY] != 0)
 				continue;
 			
-			System.out.println("newX=" + newX + ", newY=" + newY);
+			//System.out.println("newX=" + newX + ", newY=" + newY);
 			numberOfMoves++;
-			System.out.println("Number of moves: " + numberOfMoves);
+			//System.out.println("Number of moves: " + numberOfMoves);
 			chessBoard[newX][newY] = numberOfMoves;
 			if(numberOfMoves == boardSize*boardSize)
 				return true;
 			
-			printBoard();
+			//printBoard();
 			if(move(newX, newY) == true)
 				return true;
 			else
@@ -100,8 +100,9 @@ public class KnightsTour
 
 	public static void main(String[] args) 
 	{
-		KnightsTour kt = new KnightsTour(5);
-		if(kt.solve(1, 1))
+		KnightsTour kt = new KnightsTour(4);
+		System.out.println("Solving.... ");
+		if(kt.solve(0, 0))
 		{
 			System.out.println("Solution: ");
 			kt.printBoard();
