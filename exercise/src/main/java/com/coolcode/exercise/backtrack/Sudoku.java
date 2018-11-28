@@ -41,11 +41,36 @@ public class Sudoku {
 		for(int value = 0; value < matrix.length; value++)
 		{
 			if(isValidValue(cell.first, cell.second, value))
+			{
+				
+			}
+		}
 		return false;
 	}
 		
+		
+	private boolean isValidValue(int first, int second, int value) 
+	{
+		if(isNumberExistedInColumn(first, second, value)) return false;
+		if(isNumberExistedInRow(first, value)) return false;
+		if(isNumberExistedInSquare(first, second, value)) return false;
+	}
+
+	private boolean isNumberExistedInColumn(int row, int column, int value)
+	{
+		for(int i=0; i<row; i++)
+		{
+			if(matrix[i][column] == value)
+				return true;
+		}
+		return false;
+	}
+
 	private boolean isNumberExistedInSquare(int row, int column, int value)
 	{
+		if(row < 3 && column < 3)
+			row = column = 3;
+		else if(row >= 3 && row < 6 && column)
 		for(int i = row; i< row + 3; i++)
 		{
 			if (binarySearch(column, column + 2, matrix[i], value))
@@ -54,9 +79,9 @@ public class Sudoku {
 		return false;
 	}
 
-	private boolean isNumberExisted(int [] row, int value)
+	private boolean isNumberExistedInRow(int row, int value)
 	{
-		return binarySearch(0, row.length, row, value);
+		return binarySearch(0, matrix.length, matrix[row], value);
 	}
 	
 	public static boolean binarySearch(int start, int end, int [] arr, int value)
