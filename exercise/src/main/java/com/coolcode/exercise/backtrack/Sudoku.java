@@ -1,16 +1,13 @@
 package com.coolcode.exercise.backtrack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sudoku {
 	
 	private int [][] matrix;
 	
-	private int emptyCellIndex;
-	private int rowIndex;
-	private int columnIndex;
-	
-	private List<Pair<Integer>> emptyCells;
+	private List<Pair<Integer>> emptyCells = new ArrayList<>();
 
 	static public class Pair <T>
 	{
@@ -32,33 +29,41 @@ public class Sudoku {
 				if(matrix[i][j] == 0) 
 					emptyCells.add(new Pair(new Integer(i), new Integer(j)));
 			}
+		System.out.println("Cell length: " + emptyCells.size());
 	}
 	
 	public boolean solve(int nextCellIndex)
 	{
-		if(isFinished()) return true;
+		if(isFinished(nextCellIndex)) return true;
 		Pair<Integer> cell = emptyCells.get(nextCellIndex);
-		for(int value = 0; value < matrix.length; value++)
+		for(int value = 1; value < matrix.length+1; value++)
 		{
 			if(isValidValue(cell.first, cell.second, value))
 			{
-				
+				matrix[cell.first][cell.second] = value;
+				printMatrix();
+				System.out.println("Cell Index: " + nextCellIndex);
+				if(solve(nextCellIndex + 1))
+					return true;
+				matrix[cell.first][cell.second] = 0;
 			}
 		}
 		return false;
 	}
 		
 		
-	private boolean isValidValue(int first, int second, int value) 
+	private boolean isValidValue(int row, int column, int value) 
 	{
-		if(isNumberExistedInColumn(first, second, value)) return false;
-		if(isNumberExistedInRow(first, value)) return false;
-		if(isNumberExistedInSquare(first, second, value)) return false;
+		if(matrix[row][column] != 0) return false;
+		if(isNumberExistedInColumn(column, value)) return false;
+		if(isNumberExistedInRow(row, value)) return false;
+		if(isNumberExistedInSquare(row, column, value)) return false;
+		return true;
 	}
 
-	private boolean isNumberExistedInColumn(int row, int column, int value)
+	private boolean isNumberExistedInColumn(int column, int value)
 	{
-		for(int i=0; i<row; i++)
+		for(int i=0; i<matrix.length; i++)
 		{
 			if(matrix[i][column] == value)
 				return true;
@@ -66,11 +71,10 @@ public class Sudoku {
 		return false;
 	}
 
-	private boolean isNumberExistedInSquare(int row, int column, int value)
+	public boolean isNumberExistedInSquare(int row, int column, int value)
 	{
-		if(row < 3 && column < 3)
-			row = column = 3;
-		else if(row >= 3 && row < 6 && column)
+		row = row/3*3;
+		column = column/3*3;
 		for(int i = row; i< row + 3; i++)
 		{
 			if (binarySearch(column, column + 2, matrix[i], value))
@@ -81,7 +85,7 @@ public class Sudoku {
 
 	private boolean isNumberExistedInRow(int row, int value)
 	{
-		return binarySearch(0, matrix.length, matrix[row], value);
+		return binarySearch(0, matrix.length-1, matrix[row], value);
 	}
 	
 	public static boolean binarySearch(int start, int end, int [] arr, int value)
@@ -97,9 +101,9 @@ public class Sudoku {
 		
 	}
 
-	public boolean isFinished()
+	public boolean isFinished(int nextCellIndex)
 	{
-		return emptyCellIndex == emptyCells.size()-1;
+		return nextCellIndex == emptyCells.size()-1;
 	}
 	
 	public void printMatrix()
@@ -140,8 +144,12 @@ public class Sudoku {
 						   {0,0,0,4,1,9,0,0,5},
 						   {0,0,0,0,8,0,0,7,9}};
 		Sudoku sdku = new Sudoku(matrix);
-		boolean found = sdku.isNumberExistedInSquare(3, 3, 9);
-		System.out.println(found ? "found" : "not found");
+//		boolean found = sdku.isNumberExistedInColumn(7, 9);
+//		System.out.println(found ? "found" : "not found");
+		if(sdku.solve(0))
+			sdku.printMatrix();
+		else
+			System.out.println("No solution");
 			
 	}
 
