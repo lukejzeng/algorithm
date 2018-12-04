@@ -64,7 +64,7 @@ public class Knapsack
 	// will not start with item zero
 	private int findSolution(int itemNumber, int maxWeight)
 	{
-		int weightDelta = maxWeight - itemArray[itemNumber-1].weight;
+		int weightDelta = maxWeight - itemArray[itemNumber].weight;
 		int valueOfLastItemWithMaxWeight = solutionTable[itemNumber - 1][maxWeight]; 
 
 		return Math.max(valueOfLastItemWithMaxWeight, 
@@ -73,13 +73,27 @@ public class Knapsack
 						);
 	}
 	
-	public List<Item> getItems(int maxWeight)
+	public List<Integer> getItems(int maxWeight)
 	{
-		List<Knapsack.Item> items = new ArrayList<>();
-		
-		int totalValue = solutionTable[solutionTable.length-1][maxWeight];
-		while()
-		return items;
+		List<Integer> list =  new ArrayList<>();
+		getItem(itemArray.length - 1, maxWeight, list);
+		return list;
+	}
+	public void getItem(int n, int maxWeight, List<Integer> list)
+	{
+		if(n == 0 ) return;
+		int totalValue = solutionTable[n][maxWeight];
+		if(totalValue == 0 ) return;
+		int nextWeight = maxWeight - itemArray[n].weight; // 5 - 3 = 2
+		if(totalValue > solutionTable[n-1][maxWeight])
+		{
+			list.add(n);
+			getItem(n-1, nextWeight, list);
+		}
+		else if(totalValue == solutionTable[n-1][maxWeight])
+		{
+			getItem(n-1, maxWeight, list);
+		}
 	}
 
 	public static void main(String[] args) 
@@ -92,6 +106,8 @@ public class Knapsack
 		Knapsack ks = new Knapsack(items, maxWeight);
 		ks.solve(1);
 		ks.printSolution();
+		List<Integer> list =  ks.getItems(1);
+		list.stream().forEach(System.out::println);
 	}
 
 }
