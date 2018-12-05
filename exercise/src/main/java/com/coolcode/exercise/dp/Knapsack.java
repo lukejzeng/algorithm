@@ -73,6 +73,18 @@ public class Knapsack
 						);
 	}
 	
+	public void showResult()
+	{
+		for(int w = maxWeight, n = itemArray.length -1; n>0; n-- )
+		{
+			if(solutionTable[n][w] > 0 && solutionTable[n][w] != solutionTable[n-1][w] )
+			{
+				System.out.println("#" + n);
+			}
+			w = maxWeight - itemArray[n].weight;
+		}
+	}
+
 	public List<Integer> getItems(int maxWeight)
 	{
 		List<Integer> list =  new ArrayList<>();
@@ -106,8 +118,9 @@ public class Knapsack
 		Knapsack ks = new Knapsack(items, maxWeight);
 		ks.solve(1);
 		ks.printSolution();
-		List<Integer> list =  ks.getItems(1);
+		List<Integer> list =  ks.getItems(5);
 		list.stream().forEach(System.out::println);
+		ks.showResult();
 	}
 
 }
